@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyTika - Vaccine Suppliers</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">EasyTika</div>
+        <div class="bengali-text">সহজটিকা</div>
+        <a href="#" class="supplier-register">Register as supplier</a>
+    </header>
+
+    <main>
+        <aside class="filters">
+            <h2>Filters</h2>
+            
+            <!-- Diseases Filter -->
+            <div class="filter-group">
+                <div class="filter-header">
+                    <h3>Diseases</h3>
+                    <span class="toggle-arrow">▼</span>
+                </div>
+                <div class="filter-content" id="diseases-filter">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Equipment Filter -->
+            <div class="filter-group">
+                <div class="filter-header">
+                    <h3>Equipment</h3>
+                    <span class="toggle-arrow">▼</span>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-subgroup">
+                        <div class="filter-item">
+                            <input type="checkbox" id="equip-refrigerator">
+                            <label for="equip-refrigerator">Refrigerator</label>
+                        </div>
+                        <div class="sub-items">
+                            <div class="filter-item">
+                                <input type="checkbox" id="equip-walk-in" class="refrigerator-type">
+                                <label for="equip-walk-in">Walk-in-refrigerator</label>
+                            </div>
+                            <div class="filter-item">
+                                <input type="checkbox" id="equip-regular" class="refrigerator-type">
+                                <label for="equip-regular">Refrigerator</label>
+                            </div>
+                            <div class="filter-item">
+                                <input type="checkbox" id="equip-ilr" class="refrigerator-type">
+                                <label for="equip-ilr">ILR</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="equip-stabilizer">
+                        <label for="equip-stabilizer">Voltage Stabiliser</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="equip-generator">
+                        <label for="equip-generator">Emergency generator</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="equip-boxes">
+                        <label for="equip-boxes">Cold chain boxes</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="equip-thermometer">
+                        <label for="equip-thermometer">Digital thermometer</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="equip-logger">
+                        <label for="equip-logger">Data logger</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vaccination Type Filter -->
+            <div class="filter-group">
+                <div class="filter-header">
+                    <h3>Types of vaccination</h3>
+                    <span class="toggle-arrow">▼</span>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-item">
+                        <input type="checkbox" id="vax-human">
+                        <label for="vax-human">Human vaccine</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="vax-animal">
+                        <label for="vax-animal">Animal vaccine</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Services Filter -->
+            <div class="filter-group">
+                <div class="filter-header">
+                    <h3>Services</h3>
+                    <span class="toggle-arrow">▼</span>
+                </div>
+                <div class="filter-content">
+                    <div class="filter-item">
+                        <input type="checkbox" id="service-home">
+                        <label for="service-home">Home vaccination</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="service-clinic">
+                        <label for="service-clinic">Clinic vaccination</label>
+                    </div>
+                    <div class="filter-subgroup">
+                        <div class="filter-item">
+                            <input type="checkbox" id="service-delivery">
+                            <label for="service-delivery">Home delivery</label>
+                        </div>
+                        <div class="sub-items">
+                            <div class="filter-item">
+                                <input type="checkbox" id="delivery-all-india">
+                                <label for="delivery-all-india">All India</label>
+                            </div>
+                            <div class="filter-item">
+                                <input type="checkbox" id="delivery-multi-state">
+                                <label for="delivery-multi-state">Multi state</label>
+                            </div>
+                            <div class="filter-item">
+                                <input type="checkbox" id="delivery-single-state">
+                                <label for="delivery-single-state">Single state</label>
+                            </div>
+                            <div class="filter-item">
+                                <input type="checkbox" id="delivery-city">
+                                <label for="delivery-city">City wise</label>
+                            </div>
+                            <div class="filter-item">
+                                <input type="checkbox" id="delivery-local">
+                                <label for="delivery-local">Local wise</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-buttons">
+                <button id="apply-filters" class="apply-btn">Apply Filters</button>
+                <button id="reset-filters" class="reset-btn">Reset</button>
+            </div>
+        </aside>
+        
+        <section class="suppliers">
+            <h2>Vaccine Suppliers</h2>
+            <div id="suppliers-container" class="suppliers-grid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EasyTika</h3>
+                <p>Connecting vaccine suppliers with healthcare providers</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: info@easytika.com</p>
+                <p>Phone: +91 123 456 7890</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Become a Supplier</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 EasyTika. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

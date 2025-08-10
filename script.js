@@ -264,8 +264,8 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.checked = false;
         });
         
-        // Uncheck all equipment checkboxes
-        document.querySelectorAll('.filter-group:nth-child(2) input[type="checkbox"]').forEach(checkbox => {
+        // Uncheck all equipment checkboxes (including refrigerator types)
+        document.querySelectorAll('#equip-refrigerator, .refrigerator-type, #equip-stabilizer, #equip-generator, #equip-boxes, #equip-thermometer, #equip-logger').forEach(checkbox => {
             checkbox.checked = false;
         });
         

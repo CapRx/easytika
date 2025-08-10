@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     // Initialize filter sections
     const filterHeaders = document.querySelectorAll('.filter-header');
     filterHeaders.forEach(header => {
@@ -23,7 +23,7 @@
     // Disease list (all 29 diseases)
     const diseases = [
         "Flu", "HPV", "Pneumococcal", "Chicken Pox", "Tuberculosis", "Polio", 
-        "Diptheria", "Tetanus", "Pertussis", "Measles", "Mumps", "Rubella", 
+        "Diphtheria", "Tetanus", "Pertussis", "Measles", "Mumps", "Rubella", 
         "Hepatitis B", "Hib", "Rotavirus", "Hepatitis A", "Typhoid", "Meningococcal", 
         "Zoster", "Cholera", "Japanese Encephalitis", "Rabies", "Yellow fever", 
         "Tick-borne Encephalitis", "Dengue", "Ebola", "Malaria", "Covid", "RSV"
@@ -120,7 +120,7 @@
         }
     ];
 
-    // Render supplier cards
+    // Render supplier cards with show more functionality
     function renderSuppliers(suppliersToRender = suppliers) {
         const container = document.getElementById('suppliers-container');
         container.innerHTML = '';
@@ -130,14 +130,14 @@
             card.className = 'supplier-card';
             card.dataset.id = supplier.id;
 
-            // Equipment details string
+            // Create equipment details HTML with styling
             const equipmentDetails = `
-                Refrigerator: ${supplier.equipment.refrigerator}, 
-                Voltage Stabilizer: ${supplier.equipment.stabilizer ? 'Yes' : 'No'}, 
-                Emergency Generator: ${supplier.equipment.generator ? 'Yes' : 'No'}, 
-                Cold Chain Boxes: ${supplier.equipment.boxes ? 'Yes' : 'No'}, 
-                Digital Thermometer: ${supplier.equipment.thermometer ? 'Yes' : 'No'}, 
-                Data Logger: ${supplier.equipment.logger ? 'Yes' : 'No'}
+                <p><span class="equipment-label">Refrigerator:</span> ${supplier.equipment.refrigerator}</p>
+                <p><span class="equipment-label">Voltage Stabilizer:</span> <span class="${supplier.equipment.stabilizer ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.stabilizer ? 'Yes' : 'No'}</span></p>
+                <p><span class="equipment-label">Emergency Generator:</span> <span class="${supplier.equipment.generator ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.generator ? 'Yes' : 'No'}</span></p>
+                <p><span class="equipment-label">Cold Chain Boxes:</span> <span class="${supplier.equipment.boxes ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.boxes ? 'Yes' : 'No'}</span></p>
+                <p><span class="equipment-label">Digital Thermometer:</span> <span class="${supplier.equipment.thermometer ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.thermometer ? 'Yes' : 'No'}</span></p>
+                <p><span class="equipment-label">Data Logger:</span> <span class="${supplier.equipment.logger ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.logger ? 'Yes' : 'No'}</span></p>
             `;
 
             card.innerHTML = `
@@ -147,15 +147,22 @@
                 <div class="supplier-info">
                     <p><strong>GST:</strong> ${supplier.gst} | <strong>Drug License:</strong> ${supplier.license} | <strong>Years:</strong> ${supplier.years}</p>
                 </div>
-                <div class="supplier-details">
-                    <h4>Diseases:</h4>
-                    <p>${supplier.diseases.join(', ')}</p>
+                <div class="supplier-basic-details">
+                    <h4>Top Diseases:</h4>
+                    <p>${supplier.diseases.slice(0, 5).join(', ')}${supplier.diseases.length > 5 ? '...' : ''}</p>
                     
-                    <h4>Equipment:</h4>
-                    <p>${equipmentDetails}</p>
+                    <h4>Main Equipment:</h4>
+                    <p>${supplier.equipment.refrigerator}${supplier.equipment.generator ? ', Generator' : ''}</p>
                     
                     <h4>Area:</h4>
                     <p>${supplier.area}</p>
+                </div>
+                <div class="supplier-full-details">
+                    <h4>All Diseases:</h4>
+                    <p>${supplier.diseases.join(', ')}</p>
+                    
+                    <h4>Complete Equipment:</h4>
+                    ${equipmentDetails}
                     
                     <h4>Type:</h4>
                     <p>${supplier.type} vaccine</p>
@@ -163,8 +170,18 @@
                     <h4>Services:</h4>
                     <p>${supplier.services.join(', ')}</p>
                 </div>
+                <button class="show-more-btn">Show More</button>
             `;
             container.appendChild(card);
+        });
+
+        // Add event listeners to all show more buttons
+        document.querySelectorAll('.show-more-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const details = this.parentElement.querySelector('.supplier-full-details');
+                details.classList.toggle('expanded');
+                this.textContent = details.classList.contains('expanded') ? 'Show Less' : 'Show More';
+            });
         });
     }
 

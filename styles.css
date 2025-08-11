@@ -271,6 +271,95 @@ main {
     margin-bottom: 0.5rem;
 }
 
+/* Call Button Styles */
+.call-btn {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+}
+
+.call-btn:hover {
+    background-color: #3e8e41;
+}
+
+.call-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* Info Icon Styles */
+.info-icon {
+    display: inline-flex;          /* Lets us center the "i" inside the circle */
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;                   /* Circle width */
+    height: 20px;                  /* Circle height */
+    margin-left: 5px;
+
+    color: #1a73e8;                 /* "i" color */
+    font-weight: bold;              /* Make "i" more visible */
+    background-color: white;        /* Circle background */
+    border: 1px solid #1a73e8;       /* Circle border */
+    border-radius: 50%;              /* Makes it perfectly circular */
+
+    cursor: help;                    /* Show help cursor on hover */
+    position: relative;              /* For tooltip positioning */
+}
+
+
+.info-icon:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    padding: 8px;
+    background: white;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 0.8rem;
+    z-index: 100;
+}
+
+/* Equipment Status Styles */
+.equipment-yes {
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+.equipment-no {
+    color: #c62828;
+    font-weight: 600;
+}
+
+.equipment-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.equipment-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+/* Show More Button */
 .show-more-btn {
     position: absolute;
     bottom: 15px;
@@ -286,21 +375,6 @@ main {
 
 .show-more-btn:hover {
     color: #0d47a1;
-}
-
-.equipment-yes {
-    color: #2e7d32;
-    font-weight: 600;
-}
-
-.equipment-no {
-    color: #c62828;
-    font-weight: 600;
-}
-
-.equipment-label {
-    font-weight: bold;
-    color: #333;
 }
 
 footer {
@@ -375,7 +449,6 @@ footer {
         flex-direction: column;
         text-align: center;
         gap: 0.8rem;
-        padding: 1rem;
     }
     
     .logo-img {
@@ -404,5 +477,12 @@ footer {
     
     .apply-btn, .reset-btn {
         width: 100%;
+    }
+    
+    .call-btn, .show-more-btn {
+        position: static;
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
     }
 }

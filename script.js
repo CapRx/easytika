@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         diseaseListContainer.appendChild(item);
     });
 
-    // Supplier data
+    // Supplier data with phone numbers
     const suppliers = [
         {
             id: 1,
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             gst: "XYZ001",
             license: "DL001",
             years: "14",
+            phone: "+911234567891",
             diseases: ["Flu", "Pneumococcal", "Typhoid", "Chicken Pox", "Tuberculosis", "Pertussis", "Rubella", "Hib", "Rabies", "Hepatitis A", "Hepatitis B"],
             equipment: {
                 refrigerator: "Refrigerator",
@@ -67,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             gst: "ABC002",
             license: "DL002",
             years: "8",
+            phone: "+911234567892",
             diseases: ["HPV", "Polio", "Diphtheria", "Tetanus", "Measles", "Mumps", "Rotavirus", "Meningococcal", "Zoster", "Dengue"],
             equipment: {
                 refrigerator: "Walk-in-refrigerator",
@@ -86,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
             gst: "DEF003",
             license: "DL003",
             years: "12",
+            phone: "+911234567893",
             diseases: ["Chicken Pox", "Tuberculosis", "Polio", "Measles", "Mumps", "Hepatitis B", "Rotavirus", "Hepatitis A", "Typhoid", "Japanese Encephalitis"],
             equipment: {
                 refrigerator: "ILR",
@@ -105,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
             gst: "GHI004",
             license: "DL004",
             years: "6",
+            phone: "+911234567894",
             diseases: ["Flu", "Pneumococcal", "HPV", "Tuberculosis", "Pertussis", "Rubella", "Rabies", "Hepatitis A", "Covid", "RSV"],
             equipment: {
                 refrigerator: "Refrigerator",
@@ -120,7 +124,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
-    // Render supplier cards with show more functionality
+    // Equipment tooltip information
+    const equipmentInfo = {
+        refrigerator: "Storage unit for vaccines at 2-8°C temperature",
+        stabilizer: "Maintains consistent voltage to protect refrigeration equipment",
+        generator: "Provides backup power during outages to maintain cold chain",
+        boxes: "Portable containers for vaccine transportation with temperature control",
+        thermometer: "Digital device for accurate temperature monitoring",
+        logger: "Records and stores temperature data for documentation"
+    };
+
+    // Render supplier cards with all features
     function renderSuppliers(suppliersToRender = suppliers) {
         const container = document.getElementById('suppliers-container');
         container.innerHTML = '';
@@ -130,14 +144,48 @@ document.addEventListener('DOMContentLoaded', function() {
             card.className = 'supplier-card';
             card.dataset.id = supplier.id;
 
-            // Create equipment details HTML with styling
+            // Create equipment details HTML with info icons
             const equipmentDetails = `
-                <p><span class="equipment-label">Refrigerator:</span> ${supplier.equipment.refrigerator}</p>
-                <p><span class="equipment-label">Voltage Stabilizer:</span> <span class="${supplier.equipment.stabilizer ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.stabilizer ? 'Yes' : 'No'}</span></p>
-                <p><span class="equipment-label">Emergency Generator:</span> <span class="${supplier.equipment.generator ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.generator ? 'Yes' : 'No'}</span></p>
-                <p><span class="equipment-label">Cold Chain Boxes:</span> <span class="${supplier.equipment.boxes ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.boxes ? 'Yes' : 'No'}</span></p>
-                <p><span class="equipment-label">Digital Thermometer:</span> <span class="${supplier.equipment.thermometer ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.thermometer ? 'Yes' : 'No'}</span></p>
-                <p><span class="equipment-label">Data Logger:</span> <span class="${supplier.equipment.logger ? 'equipment-yes' : 'equipment-no'}">${supplier.equipment.logger ? 'Yes' : 'No'}</span></p>
+                <div class="equipment-item">
+                    <span class="equipment-label">Refrigerator:</span>
+                    <span>${supplier.equipment.refrigerator}</span>
+                    <span class="info-icon" data-tooltip="${equipmentInfo.refrigerator}">i</span>
+                </div>
+                <div class="equipment-item">
+                    <span class="equipment-label">Voltage Stabilizer:</span>
+                    <span class="${supplier.equipment.stabilizer ? 'equipment-yes' : 'equipment-no'}">
+                        ${supplier.equipment.stabilizer ? 'Yes' : 'No'}
+                    </span>
+                    <span class="info-icon" data-tooltip="${equipmentInfo.stabilizer}">i</span>
+                </div>
+                <div class="equipment-item">
+                    <span class="equipment-label">Emergency Generator:</span>
+                    <span class="${supplier.equipment.generator ? 'equipment-yes' : 'equipment-no'}">
+                        ${supplier.equipment.generator ? 'Yes' : 'No'}
+                    </span>
+                    <span class="info-icon" data-tooltip="${equipmentInfo.generator}">i</span>
+                </div>
+                <div class="equipment-item">
+                    <span class="equipment-label">Cold Chain Boxes:</span>
+                    <span class="${supplier.equipment.boxes ? 'equipment-yes' : 'equipment-no'}">
+                        ${supplier.equipment.boxes ? 'Yes' : 'No'}
+                    </span>
+                    <span class="info-icon" data-tooltip="${equipmentInfo.boxes}">i</span>
+                </div>
+                <div class="equipment-item">
+                    <span class="equipment-label">Digital Thermometer:</span>
+                    <span class="${supplier.equipment.thermometer ? 'equipment-yes' : 'equipment-no'}">
+                        ${supplier.equipment.thermometer ? 'Yes' : 'No'}
+                    </span>
+                    <span class="info-icon" data-tooltip="${equipmentInfo.thermometer}">i</span>
+                </div>
+                <div class="equipment-item">
+                    <span class="equipment-label">Data Logger:</span>
+                    <span class="${supplier.equipment.logger ? 'equipment-yes' : 'equipment-no'}">
+                        ${supplier.equipment.logger ? 'Yes' : 'No'}
+                    </span>
+                    <span class="info-icon" data-tooltip="${equipmentInfo.logger}">i</span>
+                </div>
             `;
 
             card.innerHTML = `
@@ -169,7 +217,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     <h4>Services:</h4>
                     <p>${supplier.services.join(', ')}</p>
+                    
+                    <h4>Contact:</h4>
+                    <p>Phone: ${supplier.phone}</p>
                 </div>
+                <button class="call-btn" data-phone="${supplier.phone}">
+                    <svg class="call-icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
+                    </svg>
+                    Call Now
+                </button>
                 <button class="show-more-btn">Show More</button>
             `;
             container.appendChild(card);
@@ -181,6 +238,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 const details = this.parentElement.querySelector('.supplier-full-details');
                 details.classList.toggle('expanded');
                 this.textContent = details.classList.contains('expanded') ? 'Show Less' : 'Show More';
+            });
+        });
+
+        // Add click handler for call buttons
+        document.querySelectorAll('.call-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const phoneNumber = this.getAttribute('data-phone');
+                window.open(`tel:${phoneNumber}`);
             });
         });
     }

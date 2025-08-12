@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Show location modal on page load
+    const locationModal = document.getElementById('location-modal');
+    locationModal.style.display = 'block';
+
+    // Location variables
+    let userLocation = null;
+    let locationAllowed = false;
+
     // Initialize filter sections
     const filterHeaders = document.querySelectorAll('.filter-header');
     filterHeaders.forEach(header => {
@@ -40,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         diseaseListContainer.appendChild(item);
     });
 
-    // Supplier data with phone numbers
+    // Supplier data with coordinates (latitude and longitude)
     const suppliers = [
         {
             id: 1,
@@ -60,7 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             area: "Howrah",
             type: "Human",
-            services: ["Clinic vaccination"]
+            services: ["Clinic vaccination"],
+            coordinates: { lat: 22.5958, lng: 88.2636 } // Howrah coordinates
         },
         {
             id: 2,
@@ -80,7 +89,8 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             area: "Kolkata",
             type: "Human",
-            services: ["Home vaccination", "Clinic vaccination", "Home delivery"]
+            services: ["Home vaccination", "Clinic vaccination", "Home delivery"],
+            coordinates: { lat: 22.5726, lng: 88.3639 } // Kolkata coordinates
         },
         {
             id: 3,
@@ -100,7 +110,8 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             area: "Durgapur",
             type: "Human",
-            services: ["Clinic vaccination", "Home delivery"]
+            services: ["Clinic vaccination", "Home delivery"],
+            coordinates: { lat: 23.5204, lng: 87.3119 } // Durgapur coordinates
         },
         {
             id: 4,
@@ -120,7 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             area: "Asansol",
             type: "Animal",
-            services: ["Home vaccination"]
+            services: ["Home vaccination"],
+            coordinates: { lat: 23.6739, lng: 86.9524 } // Asansol coordinates
         }
     ];
 
@@ -134,7 +146,92 @@ document.addEventListener('DOMContentLoaded', function() {
         logger: "Records and stores temperature data for documentation"
     };
 
-    // Render supplier cards with all features
+    // Calculate distance between two coordinates in kilometers (Haversine formula)
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of the earth in km
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1);
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c; // Distance in km
+        return distance;
+    }
+
+    function deg2rad(deg) {
+        return deg * (Math.PI/180);
+    }
+
+    // Get user location
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    locationAllowed = true;
+                    
+                    // Update location display
+                    document.getElementById('location-text').textContent = "Detected";
+                    
+                    // Close modal
+                    locationModal.style.display = 'none';
+                    
+                    // Render suppliers with distance
+                    renderSuppliers(sortSuppliersByDistance(suppliers));
+                },
+                function(error) {
+                    console.error("Error getting location:", error);
+                    locationModal.style.display = 'none';
+                    renderSuppliers(suppliers);
+                }
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            locationModal.style.display = 'none';
+            renderSuppliers(suppliers);
+        }
+    }
+
+    // Sort suppliers by distance from user
+    function sortSuppliersByDistance(suppliersList) {
+        if (!userLocation) return suppliersList;
+        
+        return suppliersList.map(supplier => {
+            const distance = calculateDistance(
+                userLocation.lat, 
+                userLocation.lng,
+                supplier.coordinates.lat,
+                supplier.coordinates.lng
+            );
+            return {
+                ...supplier,
+                distance: distance
+            };
+        }).sort((a, b) => a.distance - b.distance);
+    }
+
+    // Format distance for display
+    function formatDistance(distance) {
+        if (distance < 1) {
+            return `${Math.round(distance * 1000)} m`;
+        } else {
+            return `${distance.toFixed(1)} km`;
+        }
+    }
+
+    // Event listeners for location modal
+    document.getElementById('allow-location').addEventListener('click', getUserLocation);
+    document.getElementById('deny-location').addEventListener('click', function() {
+        locationModal.style.display = 'none';
+        renderSuppliers(suppliers);
+    });
+
+    // Render supplier cards with distance information
     function renderSuppliers(suppliersToRender = suppliers) {
         const container = document.getElementById('suppliers-container');
         container.innerHTML = '';
@@ -188,9 +285,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
 
+            // Add distance information if available
+            const distanceInfo = supplier.distance ? 
+                `<span class="distance-indicator">${formatDistance(supplier.distance)} away</span>` : 
+                '';
+
             card.innerHTML = `
                 <div class="supplier-header">
-                    <h3>${supplier.name}</h3>
+                    <h3>${supplier.name} ${distanceInfo}</h3>
                 </div>
                 <div class="supplier-info">
                     <p><strong>GST:</strong> ${supplier.gst} | <strong>Drug License:</strong> ${supplier.license} | <strong>Years:</strong> ${supplier.years}</p>
@@ -287,8 +389,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('service-clinic').checked) selectedServices.push("Clinic vaccination");
         if (document.getElementById('service-delivery').checked) selectedServices.push("Home delivery");
 
+        // Check if "Show nearest first" is selected
+        const showNearestFirst = document.getElementById('filter-nearby').checked;
+
         // Filter the suppliers
-        const filteredSuppliers = suppliers.filter(supplier => {
+        let filteredSuppliers = suppliers.filter(supplier => {
             // Filter by diseases if any are selected
             if (selectedDiseases.length > 0 && 
                 !selectedDiseases.some(disease => supplier.diseases.includes(disease))) {
@@ -320,6 +425,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return true;
         });
 
+        // Sort by distance if requested and location is available
+        if (showNearestFirst && userLocation) {
+            filteredSuppliers = sortSuppliersByDistance(filteredSuppliers);
+        }
+
         renderSuppliers(filteredSuppliers);
     }
 
@@ -347,14 +457,18 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.checked = false;
         });
         
+        // Uncheck nearby filter
+        document.getElementById('filter-nearby').checked = false;
+        
         // Show all suppliers again
-        renderSuppliers(suppliers);
+        if (userLocation) {
+            renderSuppliers(sortSuppliersByDistance(suppliers));
+        } else {
+            renderSuppliers(suppliers);
+        }
     }
 
     // Event listeners
     document.getElementById('apply-filters').addEventListener('click', filterSuppliers);
     document.getElementById('reset-filters').addEventListener('click', resetFilters);
-
-    // Initial render
-    renderSuppliers();
 });

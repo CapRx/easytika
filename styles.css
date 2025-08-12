@@ -1,3 +1,4 @@
+/* ===== BASE STYLES ===== */
 * {
     margin: 0;
     padding: 0;
@@ -11,6 +12,7 @@ body {
     line-height: 1.6;
 }
 
+/* ===== HEADER STYLES ===== */
 header {
     display: flex;
     justify-content: space-between;
@@ -73,6 +75,7 @@ header {
     background-color: #f57c00;
 }
 
+/* ===== MAIN CONTENT LAYOUT ===== */
 main {
     display: flex;
     padding: 2rem 5%;
@@ -80,6 +83,7 @@ main {
     gap: 2rem;
 }
 
+/* ===== FILTERS SECTION ===== */
 .filters {
     flex: 0 0 25%;
     background-color: white;
@@ -195,6 +199,7 @@ main {
     background-color: #d32f2f;
 }
 
+/* ===== SUPPLIERS SECTION ===== */
 .suppliers {
     flex: 1;
 }
@@ -271,7 +276,7 @@ main {
     margin-bottom: 0.5rem;
 }
 
-/* Call Button Styles */
+/* ===== CALL BUTTON STYLES ===== */
 .call-btn {
     position: absolute;
     bottom: 15px;
@@ -299,7 +304,7 @@ main {
     height: 16px;
 }
 
-/* Info Icon Styles */
+/* ===== INFO ICON STYLES ===== */
 .info-icon {
     display: inline-flex;
     align-items: center;
@@ -332,22 +337,11 @@ main {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     font-size: 0.8rem;
     z-index: 100;
-    white-space: normal;          /* Allow wrapping */
-    word-wrap: break-word;        /* Break long words if needed */
+    white-space: normal;
+    word-wrap: break-word;
 }
 
-/* Mobile fix */
-@media (max-width: 600px) {
-    .info-icon:hover::after {
-        left: 50%;
-        top: 120%;                 /* Show below the icon */
-        transform: translateX(-50%);
-        max-width: 90vw;           /* Almost full screen */
-    }
-}
-
-
-/* Equipment Status Styles */
+/* ===== EQUIPMENT STATUS STYLES ===== */
 .equipment-yes {
     color: #2e7d32;
     font-weight: 600;
@@ -369,7 +363,7 @@ main {
     margin-bottom: 5px;
 }
 
-/* Show More Button */
+/* ===== SHOW MORE BUTTON ===== */
 .show-more-btn {
     position: absolute;
     bottom: 15px;
@@ -387,6 +381,7 @@ main {
     color: #0d47a1;
 }
 
+/* ===== FOOTER STYLES ===== */
 footer {
     background: linear-gradient(135deg, #1a73e8, #0d47a1);
     color: white;
@@ -443,6 +438,88 @@ footer {
     font-size: 0.9rem;
 }
 
+/* ===== LOCATION-BASED STYLES (NEW) ===== */
+/* Location Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.allow-btn {
+    background-color: #1a73e8;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    margin: 1rem 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.allow-btn:hover {
+    background-color: #0d47a1;
+}
+
+.deny-btn {
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 0.7rem 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 1rem 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.deny-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Location Display */
+.location-display {
+    padding: 0.8rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.location-display span {
+    font-weight: 600;
+    color: #1a73e8;
+}
+
+/* Distance Indicator */
+.distance-indicator {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    font-weight: 600;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
 @media (max-width: 900px) {
     main {
         flex-direction: column;
@@ -494,5 +571,25 @@ footer {
         margin-top: 10px;
         width: 100%;
         text-align: center;
+    }
+
+    /* Mobile modal adjustments */
+    .modal-content {
+        margin: 30% auto;
+        width: 90%;
+    }
+    
+    .allow-btn, .deny-btn {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    /* Mobile tooltip adjustment */
+    .info-icon:hover::after {
+        left: 50%;
+        top: 120%;
+        transform: translateX(-50%);
+        max-width: 90vw;
     }
 }
